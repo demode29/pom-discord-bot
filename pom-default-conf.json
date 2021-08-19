@@ -1,0 +1,8 @@
+{
+    "pomStartDefConfig": {
+        "workTime": 35,
+        "breakTime": 5,
+        "longBreakTime": 15,
+        "iterations": 4
+    }
+}
