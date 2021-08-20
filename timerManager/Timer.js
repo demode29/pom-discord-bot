@@ -38,6 +38,9 @@ class Timer {
 
 	resume() {
 		if(this.isStopped) {
+			console.log('resumed');
+
+			this.isStopped = false;
 			this.startTime = Date.now();
 			this.identifier = setInterval(() => {this.timer();}, 1000);
 		}
@@ -52,7 +55,7 @@ class Timer {
 
 		if(this.isStopped) {
 			// save remaining minutes
-			this.duration = minutes;
+			this.duration = diff;
 			clearInterval(this.identifier);
 
 			return;

@@ -17,4 +17,8 @@ module.exports = {
 		STOP: 'stop',
 		STOP_DESC: 'POOM STOPP!!!!',
 	},
+	POM_COMMAND_RESUME: {
+		RESUME: 'resume',
+		RESUME_DESC: 'okayy let\'s continue',
+	},
 };

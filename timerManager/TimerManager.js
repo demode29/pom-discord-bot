@@ -42,20 +42,6 @@ class TimerManager {
 	}
 
 	initializeTimers() {
-		/* (this.timerMap[this.currentTimerKey]).start((minutes) => {
-			console.log(minutes);
-		}, () => {
-			console.log('Work time is finished');
-
-			this.currentTimerKey = 'breakTime';
-
-			(this.timerMap[this.currentTimerKey]).start((minutes) => {
-				console.log(minutes);
-			}, () => {
-				console.log('Break time is finished');
-			});
-		}); */
-
 		this.recursiveTimer(this.timerSettings.iterations);
 
 		return true;

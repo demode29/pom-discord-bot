@@ -33,6 +33,11 @@ module.exports = {
 			new SlashCommandSubcommandBuilder()
 				.setName(PomConstants.POM_COMMAND_STOP.STOP)
 				.setDescription(PomConstants.POM_COMMAND_STOP.STOP_DESC),
+		)
+		.addSubcommand(
+			new SlashCommandSubcommandBuilder()
+				.setName(PomConstants.POM_COMMAND_RESUME.RESUME)
+				.setDescription(PomConstants.POM_COMMAND_RESUME.RESUME_DESC),
 		),
 	async execute(interaction) {
 		timerManager.setInteraction(interaction);
@@ -53,6 +58,9 @@ module.exports = {
 		}
 		else if (subCommandName === 'stop') {
 			timerManager.stopTimer();
+		}
+		else if (subCommandName === 'resume') {
+			timerManager.resumeTimer();
 		}
 
 		await interaction.reply('Hey let\'s work together :) POOMMM');
