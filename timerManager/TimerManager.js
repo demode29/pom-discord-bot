@@ -6,8 +6,6 @@
 
 // will stop, resume, clear timer
 const { pomStartDefConfig } = require('../pom-default-conf.json');
-// const Timeout = require('smart-timeout');
-
 const Timer = require('./Timer.js');
 
 class TimerManager {
@@ -44,13 +42,44 @@ class TimerManager {
 	}
 
 	initializeTimers() {
-		(this.timerMap[this.currentTimerKey]).start((minutes) => {
+		/* (this.timerMap[this.currentTimerKey]).start((minutes) => {
 			console.log(minutes);
 		}, () => {
-			console.log('Function is finished');
-		});
+			console.log('Work time is finished');
+
+			this.currentTimerKey = 'breakTime';
+
+			(this.timerMap[this.currentTimerKey]).start((minutes) => {
+				console.log(minutes);
+			}, () => {
+				console.log('Break time is finished');
+			});
+		}); */
+
+		this.recursiveTimer(this.timerSettings.iterations);
 
 		return true;
+	}
+
+	recursiveTimer(iteration) {
+		if (iteration !== 0) {
+			(this.timerMap[this.currentTimerKey]).start((minutes) => {
+				console.log(minutes);
+			}, () => {
+				console.log('Work time is finished');
+
+				this.currentTimerKey = 'breakTime';
+
+				(this.timerMap[this.currentTimerKey]).start((minutes) => {
+					console.log(minutes);
+				}, () => {
+					console.log('Break time is finished');
+					this.recursiveTimer(iteration - 1);
+				});
+			});
+		}
+
+		return;
 	}
 
 	stopTimer() {
@@ -78,12 +107,3 @@ class TimerManager {
 }
 
 module.exports = TimerManager;
-
-/* return Timeout.create(this.timerKey,
-	() => {
-			console.log('CREATEEEED');
-			this.timerKey = 'break-pom';
-
-			this.informUser('Study time is over!!! Let\'s have a POOM break');
-
-	}, this.timerSettings.workTime); */

@@ -13,4 +13,8 @@ module.exports = {
 		ITERATIONS: 'iterations',
 		ITERATIONS_DESC: 'work => break for {iterations} then long break',
 	},
+	POM_COMMAND_STOP: {
+		STOP: 'stop',
+		STOP_DESC: 'POOM STOPP!!!!',
+	},
 };
