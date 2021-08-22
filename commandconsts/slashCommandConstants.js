@@ -21,4 +21,8 @@ module.exports = {
 		RESUME: 'resume',
 		RESUME_DESC: 'okayy let\'s continue',
 	},
+	POM_COMMAND_RESET: {
+		RESET: 'reset',
+		RESET_DESC: 'reset!!!!!!!!!!!!!!!',
+	},
 };

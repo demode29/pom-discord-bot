@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandIntegerOption } = require('@discordjs/builders');
 const PomConstants = require('../commandconsts/slashCommandConstants');
-const TimerManager = require('../timerManager/TimerManager.js');
+const PomodoroManager = require('../pomodoroManager/PomodoroManager.js');
 
-const timerManager = new TimerManager();
+const pomodoroManager = new PomodoroManager();
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -38,9 +38,14 @@ module.exports = {
 			new SlashCommandSubcommandBuilder()
 				.setName(PomConstants.POM_COMMAND_RESUME.RESUME)
 				.setDescription(PomConstants.POM_COMMAND_RESUME.RESUME_DESC),
+		)
+		.addSubcommand(
+			new SlashCommandSubcommandBuilder()
+				.setName(PomConstants.POM_COMMAND_RESET.RESET)
+				.setDescription(PomConstants.POM_COMMAND_RESET.RESET_DESC),
 		),
 	async execute(interaction) {
-		timerManager.setInteraction(interaction);
+		// timerManager.setInteraction(interaction);
 		const subCommandName = interaction.options.getSubcommand();
 
 		if (subCommandName === 'start') {
@@ -54,13 +59,16 @@ module.exports = {
 				iterations: interaction.options
 					.getInteger(PomConstants.POM_COMMAND_START.ITERATIONS),
 			};
-			timerManager.createTimers(pomStartSettings);
+			pomodoroManager.initPomodoro(pomStartSettings);
 		}
 		else if (subCommandName === 'stop') {
-			timerManager.stopTimer();
+			pomodoroManager.stopState();
 		}
 		else if (subCommandName === 'resume') {
-			timerManager.resumeTimer();
+			pomodoroManager.resumeState();
+		}
+		else if (subCommandName === 'reset') {
+			pomodoroManager.resetState();
 		}
 
 		await interaction.reply('Hey let\'s work together :) POOMMM');
