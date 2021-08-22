@@ -6,7 +6,7 @@ class Timer {
 		this.isStopped = false;
 	}
 
-	async startAsync() {
+	async start() {
 		if (this.isRunning) {
 			return false;
 		}
@@ -15,7 +15,7 @@ class Timer {
 		this.isRunning = true;
 		this.startTime = Date.now();
 
-		return new Promise((resolve) => this.identifier = setInterval(() => {this.asyncTimer(resolve);}, 1000));
+		return new Promise((resolve) => this.identifier = setInterval(() => {this.timer(resolve);}, 1000));
 	}
 
 	async reset() {
@@ -32,7 +32,7 @@ class Timer {
 		}
 	}
 
-	async asyncTimer(resolve) {
+	async timer(resolve) {
 		let diff = this.duration - (((Date.now() - this.startTime) / 1000) | 0);
 		const minutes = Math.round(diff / 60);
 

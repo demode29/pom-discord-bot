@@ -51,7 +51,7 @@ class PomodoroManager {
 	async initStates() {
 		// while loop burada i
 		while (this.currentState.completedPomodoros < 6
-			&& await this.stateMap[this.currentState.key].startAsync()) {
+			&& await this.stateMap[this.currentState.key].start()) {
 			// transition state
 			console.log('Transitioning state');
 			this.currentMinutes = this.currentMinutes + (this.stateMap[this.currentState.key].duration);
@@ -83,27 +83,14 @@ class PomodoroManager {
 
 	async stopState() {
 		// stops the current timer
-		// const isStopSuccess = (this.stateMap[this.currentState.key]).stop();
 
 		(this.stateMap[this.currentState.key]).stop();
-
-		/* if (isStopSuccess) {
-			// move state to initial work time position
-			this.currentState.key = 'workTime';
-
-			return true;
-		} */
-		return false;
-		// yine inform user
 	}
 
 	async resumeState() {
 		// resumes the current timer
 
 		this.initStates();
-		// return (this.stateMap[this.currentState.key]).startAsync();
-
-		// yine inform user
 	}
 
 	async resetState() {
@@ -111,9 +98,6 @@ class PomodoroManager {
 		(this.stateMap[this.currentState.key]).reset();
 
 		this.currentState.key = 'workTime';
-
-		// return (this.stateMap[this.currentState.key]).reset();
-
 		// yine inform user
 	}
 
