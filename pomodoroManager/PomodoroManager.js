@@ -10,7 +10,7 @@ const Timer = require('./Timer.js');
 
 class PomodoroManager {
 	// user notification object must be here
-	constructor() {
+	constructor(userNotification) {
 		this.timerSettings = pomStartDefConfig;
 		this.stateMap = {};
 		this.totalTimeSpent = 0;
@@ -18,6 +18,7 @@ class PomodoroManager {
 			completedPomodoros: 0,
 			key: 'workTime',
 		};
+		this.userNotification = userNotification;
 	}
 
 	async initPomodoro(timerSettings) {
@@ -36,6 +37,8 @@ class PomodoroManager {
 
 		this.timerSettings = mergedTimer;
 
+		this.userNotification.showCurrentSettings(this.timerSettings);
+
 		// minutes to seconds conversion and then create timers
 		for (const [key, value] of Object.entries(this.timerSettings)) {
 			if (key !== 'iterations') {
@@ -49,7 +52,6 @@ class PomodoroManager {
 	}
 
 	async initStates() {
-		// while loop burada i
 		while (this.currentState.completedPomodoros < 6
 			&& await this.stateMap[this.currentState.key].start()) {
 			// transition state
@@ -102,11 +104,7 @@ class PomodoroManager {
 	}
 
 	getCurrentState() {
-		return this.currentTimerKey;
-	}
-
-	getRemainingMinutes() {
-		return this.currentMinutes;
+		return this.currentState;
 	}
 
 	/*

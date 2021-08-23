@@ -1,8 +1,11 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandIntegerOption } = require('@discordjs/builders');
 const PomConstants = require('../commandconsts/slashCommandConstants');
-const PomodoroManager = require('../pomodoroManager/PomodoroManager.js');
+const UserNotification = require('../notification/UserNotification');
+const PomodoroManager = require('../pomodoroManager/PomodoroManager');
 
-const pomodoroManager = new PomodoroManager();
+const userNotification = new UserNotification();
+const pomodoroManager = new PomodoroManager(userNotification);
+
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -47,6 +50,8 @@ module.exports = {
 	async execute(interaction) {
 		// timerManager.setInteraction(interaction);
 		const subCommandName = interaction.options.getSubcommand();
+
+		userNotification.setCurrentChannel(interaction.channel);
 
 		if (subCommandName === 'start') {
 			const pomStartSettings = {
