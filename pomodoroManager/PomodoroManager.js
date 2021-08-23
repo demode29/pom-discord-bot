@@ -1,10 +1,3 @@
-// Timer Manager ?? VERY IMPORTANT CLASS SINGLETON
-
-// will check if timer exists
-
-// will create a timer with specified config
-
-// will stop, resume, clear timer
 const { pomStartDefConfig } = require('../pom-default-conf.json');
 const Timer = require('./Timer.js');
 
@@ -17,8 +10,10 @@ class PomodoroManager {
 		this.currentState = {
 			completedPomodoros: 0,
 			key: 'workTime',
+			remainingMinutes: 0,
 		};
 		this.userNotification = userNotification;
+		this.isCountdownVisible = false;
 	}
 
 	async initPomodoro(timerSettings) {
@@ -42,16 +37,18 @@ class PomodoroManager {
 		// minutes to seconds conversion and then create timers
 		for (const [key, value] of Object.entries(this.timerSettings)) {
 			if (key !== 'iterations') {
-				this.stateMap[key] = new Timer(value * 60);
+				this.stateMap[key] = new Timer(value);
 			}
 		}
 
-		this.initStates();
+		this.currentState.remainingMinutes = (this.stateMap[this.currentState.key]).getRemainingMinutes();
 
-		return true;
+		this.initStates();
 	}
 
 	async initStates() {
+		this.userNotification.informChannel('Pomodoro started !!!!');
+
 		while (this.currentState.completedPomodoros < 6
 			&& await this.stateMap[this.currentState.key].start()) {
 			// transition state
@@ -64,10 +61,6 @@ class PomodoroManager {
 				if (this.currentState.completedPomodoros % this.timerSettings.iterations === 0) {
 					console.log('Transitioning into long break state');
 					this.currentState.key = 'longBreakTime';
-
-					// await reply burada olmalı
-
-					// eğer reply no ise direk break loop, evet devam ise work time ı yine setle
 				}
 				else {
 					console.log('Transitioning into break state');
@@ -101,6 +94,28 @@ class PomodoroManager {
 
 		this.currentState.key = 'workTime';
 		// yine inform user
+	}
+
+	async showCountdown() {
+		if (Object.entries(this.stateMap).length > 0) {
+			this.isCountdownVisible = true;
+			const message = await this.userNotification.showPomCountdown(this.currentState);
+
+			while (this.isCountdownVisible) {
+				await new Promise((resolve) => setTimeout(() => {resolve(true);}, 1000));
+
+				this.currentState.remainingMinutes = (this.stateMap[this.currentState.key]).getRemainingMinutes();
+
+				this.userNotification.updateCountdown(message, this.currentState);
+			}
+		}
+		else {
+			this.userNotification.informChannel('There is not any running pomodoro, please start pom. For help use \'/pom help\'');
+		}
+	}
+
+	async closeCountdown() {
+		this.isCountdownVisible = false;
 	}
 
 	getCurrentState() {

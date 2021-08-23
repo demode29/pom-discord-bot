@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js');
 class UserNotification {
 	constructor() {
 		this.currentChannel = {};
+		this.currentCountDownEmbed = new MessageEmbed();
 	}
 
 	async showCurrentSettings(currentSettings) {
@@ -18,11 +19,29 @@ class UserNotification {
 			);
 
 		this.currentChannel.send({ embeds: [currentSettingsEmbed] });
-		return true;
 	}
 
-	async showPomCountdown() {
-		return true;
+	async informChannel(text) {
+		this.currentChannel.send(text);
+	}
+
+	async showPomCountdown(currentState) {
+		this.currentCountDownEmbed.setTitle('Pom Timer').setColor('#f58cc5')
+			.addFields(
+				{ name: 'Remaining Time', value: `${currentState.remainingMinutes} min left` },
+			);
+
+		return await this.currentChannel.send({ embeds: [this.currentCountDownEmbed] });
+	}
+
+	async updateCountdown(message, currentState) {
+		console.log('updating countdown');
+
+		this.currentCountDownEmbed.setFields({
+			name: 'Remaining Time', value: `${currentState.remainingMinutes} min left`,
+		});
+
+		message.edit({ embeds: [this.currentCountDownEmbed] });
 	}
 
 	setCurrentChannel(currentChannel) {

@@ -1,9 +1,10 @@
 class Timer {
 	constructor(duration) {
-		this.duration = duration;
+		this.duration = duration * 60;
 		this.isRunning = false;
 		this.startTime = 0;
 		this.isStopped = false;
+		this.remainingMinutes = duration;
 	}
 
 	async start() {
@@ -34,9 +35,7 @@ class Timer {
 
 	async timer(resolve) {
 		let diff = this.duration - (((Date.now() - this.startTime) / 1000) | 0);
-		const minutes = Math.round(diff / 60);
-
-		console.log(minutes);
+		this.remainingMinutes = Math.round(diff / 60);
 
 		if(this.isStopped) {
 			this.duration = diff;
@@ -54,9 +53,18 @@ class Timer {
 		if(diff < 0) {
 			this.isRunning = false;
 			diff = 0;
+			this.remainingMinutes = 0;
 			clearInterval(this.identifier);
 			return resolve(true);
 		}
+	}
+
+	getDuration() {
+		return this.duration;
+	}
+
+	getRemainingMinutes() {
+		return this.remainingMinutes;
 	}
 }
 

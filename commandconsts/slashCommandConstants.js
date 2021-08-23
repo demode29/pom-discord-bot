@@ -25,4 +25,11 @@ module.exports = {
 		RESET: 'reset',
 		RESET_DESC: 'reset!!!!!!!!!!!!!!!',
 	},
+	// pom countdown show || pom countdown close
+	POM_COMMAND_COUNTDOWN: {
+		SHOW: 'countdownshow',
+		SHOW_DESC: 'This command shows countdown',
+		CLOSE: 'countdownclose',
+		CLOSE_DESC: 'This command closes countdown',
+	},
 };

@@ -11,26 +11,25 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName(PomConstants.POM)
 		.setDescription(PomConstants.POM_DESC)
-		.addSubcommand(
-			new SlashCommandSubcommandBuilder()
-				.setName(PomConstants.POM_COMMAND_START.START)
-				.setDescription(PomConstants.POM_COMMAND_START.START_DESC)
-				.addIntegerOption(
-					new SlashCommandIntegerOption()
-						.setName(PomConstants.POM_COMMAND_START.WORK_TIME)
-						.setDescription(PomConstants.POM_COMMAND_START.WORK_DESC))
-				.addIntegerOption(
-					new SlashCommandIntegerOption()
-						.setName(PomConstants.POM_COMMAND_START.BREAK_TIME)
-						.setDescription(PomConstants.POM_COMMAND_START.BREAK_DESC))
-				.addIntegerOption(
-					new SlashCommandIntegerOption()
-						.setName(PomConstants.POM_COMMAND_START.LONG_BREAK_TIME)
-						.setDescription(PomConstants.POM_COMMAND_START.LONG_BREAK_DESC))
-				.addIntegerOption(
-					new SlashCommandIntegerOption()
-						.setName(PomConstants.POM_COMMAND_START.ITERATIONS)
-						.setDescription(PomConstants.POM_COMMAND_START.ITERATIONS_DESC)),
+		.addSubcommand(new SlashCommandSubcommandBuilder ()
+			.setName(PomConstants.POM_COMMAND_START.START)
+			.setDescription(PomConstants.POM_COMMAND_START.START_DESC)
+			.addIntegerOption(
+				new SlashCommandIntegerOption()
+					.setName(PomConstants.POM_COMMAND_START.WORK_TIME)
+					.setDescription(PomConstants.POM_COMMAND_START.WORK_DESC))
+			.addIntegerOption(
+				new SlashCommandIntegerOption()
+					.setName(PomConstants.POM_COMMAND_START.BREAK_TIME)
+					.setDescription(PomConstants.POM_COMMAND_START.BREAK_DESC))
+			.addIntegerOption(
+				new SlashCommandIntegerOption()
+					.setName(PomConstants.POM_COMMAND_START.LONG_BREAK_TIME)
+					.setDescription(PomConstants.POM_COMMAND_START.LONG_BREAK_DESC))
+			.addIntegerOption(
+				new SlashCommandIntegerOption()
+					.setName(PomConstants.POM_COMMAND_START.ITERATIONS)
+					.setDescription(PomConstants.POM_COMMAND_START.ITERATIONS_DESC)),
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
@@ -46,10 +45,21 @@ module.exports = {
 			new SlashCommandSubcommandBuilder()
 				.setName(PomConstants.POM_COMMAND_RESET.RESET)
 				.setDescription(PomConstants.POM_COMMAND_RESET.RESET_DESC),
+		)
+		.addSubcommand(
+			new SlashCommandSubcommandBuilder()
+				.setName(PomConstants.POM_COMMAND_COUNTDOWN.SHOW)
+				.setDescription(PomConstants.POM_COMMAND_COUNTDOWN.SHOW_DESC))
+		.addSubcommand(
+			new SlashCommandSubcommandBuilder()
+				.setName(PomConstants.POM_COMMAND_COUNTDOWN.CLOSE)
+				.setDescription(PomConstants.POM_COMMAND_COUNTDOWN.CLOSE_DESC),
 		),
 	async execute(interaction) {
 		// timerManager.setInteraction(interaction);
 		const subCommandName = interaction.options.getSubcommand();
+
+		console.log(subCommandName);
 
 		userNotification.setCurrentChannel(interaction.channel);
 
@@ -74,6 +84,12 @@ module.exports = {
 		}
 		else if (subCommandName === 'reset') {
 			pomodoroManager.resetState();
+		}
+		else if (subCommandName === 'countdownshow') {
+			pomodoroManager.showCountdown();
+		}
+		else if (subCommandName === 'countdownclose') {
+			pomodoroManager.closeCountdown();
 		}
 
 		await interaction.reply('Hey let\'s work together :) POOMMM');
