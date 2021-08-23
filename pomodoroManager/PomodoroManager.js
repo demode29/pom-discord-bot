@@ -51,26 +51,19 @@ class PomodoroManager {
 
 		while (this.currentState.completedPomodoros < 6
 			&& await this.stateMap[this.currentState.key].start()) {
-			// transition state
-			console.log('Transitioning state');
 			this.currentMinutes = this.currentMinutes + (this.stateMap[this.currentState.key].duration);
 
 			if(this.currentState.key === 'workTime') {
 				this.currentState.completedPomodoros = this.currentState.completedPomodoros + 1;
 
 				if (this.currentState.completedPomodoros % this.timerSettings.iterations === 0) {
-					console.log('Transitioning into long break state');
 					this.currentState.key = 'longBreakTime';
 				}
 				else {
-					console.log('Transitioning into break state');
 					this.currentState.key = 'breakTime';
-
-					// inform user
 				}
 			}
 			else {
-				console.log('Transitioning into work state');
 				this.currentState.key = 'workTime';
 			}
 		}
@@ -78,12 +71,14 @@ class PomodoroManager {
 
 	async stopState() {
 		// stops the current timer
+		this.userNotification.informChannel('Stopping pomodoro');
 
 		(this.stateMap[this.currentState.key]).stop();
 	}
 
 	async resumeState() {
 		// resumes the current timer
+		this.userNotification.informChannel('Resuming your pomodoro');
 
 		this.initStates();
 	}
@@ -101,12 +96,18 @@ class PomodoroManager {
 			this.isCountdownVisible = true;
 			const message = await this.userNotification.showPomCountdown(this.currentState);
 
+			let prevState = (this.stateMap[this.currentState.key]).getRemainingMinutes();
+
 			while (this.isCountdownVisible) {
-				await new Promise((resolve) => setTimeout(() => {resolve(true);}, 1000));
+				await new Promise((resolve) => setTimeout(() => {resolve(true);}, 500));
 
 				this.currentState.remainingMinutes = (this.stateMap[this.currentState.key]).getRemainingMinutes();
 
-				this.userNotification.updateCountdown(message, this.currentState);
+				if (prevState !== this.currentState.remainingMinutes) {
+					this.userNotification.updateCountdown(message, this.currentState);
+				}
+
+				prevState = this.currentState.remainingMinutes;
 			}
 		}
 		else {
@@ -121,15 +122,6 @@ class PomodoroManager {
 	getCurrentState() {
 		return this.currentState;
 	}
-
-	/*
-	async informUser(info) {
-		const result = await this.interaction.channel.send(info);
-		console.log(result);
-
-		result.edit('heyyyyy');
-		// await this.interaction.reply(info);
-	} */
 }
 
 module.exports = PomodoroManager;

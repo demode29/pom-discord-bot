@@ -75,6 +75,8 @@ module.exports = {
 					.getInteger(PomConstants.POM_COMMAND_START.ITERATIONS),
 			};
 			pomodoroManager.initPomodoro(pomStartSettings);
+
+			await interaction.reply('Hey let\'s work together :) POOMMM');
 		}
 		else if (subCommandName === 'stop') {
 			pomodoroManager.stopState();
@@ -91,7 +93,5 @@ module.exports = {
 		else if (subCommandName === 'countdownclose') {
 			pomodoroManager.closeCountdown();
 		}
-
-		await interaction.reply('Hey let\'s work together :) POOMMM');
 	},
 };

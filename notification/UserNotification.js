@@ -15,7 +15,7 @@ class UserNotification {
 				{ name: 'Work duration', value: `${currentSettings.workTime} min` },
 				{ name: 'Break duration', value: `${currentSettings.breakTime} min` },
 				{ name: 'Long break duration', value: `${currentSettings.longBreakTime} min` },
-				{ name: 'Iteration count', value: `${currentSettings.iterations} min` },
+				{ name: 'Iteration count', value: `${currentSettings.iterations} times` },
 			);
 
 		this.currentChannel.send({ embeds: [currentSettingsEmbed] });
@@ -25,8 +25,32 @@ class UserNotification {
 		this.currentChannel.send(text);
 	}
 
+	// returns state title and state color
+	parseState(stateKey) {
+		if (stateKey === 'workTime') {
+			return {
+				stateTitle: 'Work Time',
+				stateColor: '#f58cc5',
+			};
+		}
+		else if(stateKey === 'breakTime') {
+			return {
+				stateTitle: 'Break Time',
+				stateColor: '#b5ff3d',
+			};
+		}
+		else {
+			return {
+				stateTitle: 'Long Break Time',
+				stateColor: '#ffaca6',
+			};
+		}
+	}
+
 	async showPomCountdown(currentState) {
-		this.currentCountDownEmbed.setTitle('Pom Timer').setColor('#f58cc5')
+		const parsedState = this.parseState(currentState.key);
+
+		this.currentCountDownEmbed.setTitle(parsedState.stateTitle).setColor(parsedState.stateColor)
 			.addFields(
 				{ name: 'Remaining Time', value: `${currentState.remainingMinutes} min left` },
 			);
@@ -35,11 +59,12 @@ class UserNotification {
 	}
 
 	async updateCountdown(message, currentState) {
-		console.log('updating countdown');
+		const parsedState = this.parseState(currentState.key);
 
-		this.currentCountDownEmbed.setFields({
-			name: 'Remaining Time', value: `${currentState.remainingMinutes} min left`,
-		});
+		this.currentCountDownEmbed
+			.setTitle(parsedState.stateTitle).setColor(parsedState.stateColor).setFields({
+				name: 'Remaining Time', value: `${currentState.remainingMinutes} min left`,
+			});
 
 		message.edit({ embeds: [this.currentCountDownEmbed] });
 	}

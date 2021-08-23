@@ -37,6 +37,8 @@ class Timer {
 		let diff = this.duration - (((Date.now() - this.startTime) / 1000) | 0);
 		this.remainingMinutes = Math.round(diff / 60);
 
+		console.log(this.remainingMinutes);
+
 		if(this.isStopped) {
 			this.duration = diff;
 			clearInterval(this.identifier);
