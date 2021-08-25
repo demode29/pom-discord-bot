@@ -13,4 +13,5 @@ There are still lots of things to do.
 ### References
 
 https://discordjs.guide/#before-you-begin \
-https://github.com/AnIdiotsGuide/guidebot 
+https://github.com/AnIdiotsGuide/guidebot  \
+https://github.com/benjamonnguyen/Pomomo

@@ -47,7 +47,7 @@ class PomodoroManager {
 	}
 
 	async initStates() {
-		this.userNotification.informChannel('Pomodoro started !!!!');
+		// this.userNotification.informChannel('Pomodoro started !!!!');
 
 		while (this.currentState.completedPomodoros < 6
 			&& await this.stateMap[this.currentState.key].start()) {
@@ -71,14 +71,14 @@ class PomodoroManager {
 
 	async stopState() {
 		// stops the current timer
-		this.userNotification.informChannel('Stopping pomodoro');
+	//	this.userNotification.informChannel('Stopping pomodoro');
 
 		(this.stateMap[this.currentState.key]).stop();
 	}
 
 	async resumeState() {
 		// resumes the current timer
-		this.userNotification.informChannel('Resuming your pomodoro');
+	//	this.userNotification.informChannel('Resuming your pomodoro');
 
 		this.initStates();
 	}

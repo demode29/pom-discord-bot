@@ -56,10 +56,7 @@ module.exports = {
 				.setDescription(PomConstants.POM_COMMAND_COUNTDOWN.CLOSE_DESC),
 		),
 	async execute(interaction) {
-		// timerManager.setInteraction(interaction);
 		const subCommandName = interaction.options.getSubcommand();
-
-		console.log(subCommandName);
 
 		userNotification.setCurrentChannel(interaction.channel);
 
@@ -80,18 +77,28 @@ module.exports = {
 		}
 		else if (subCommandName === 'stop') {
 			pomodoroManager.stopState();
+
+			await interaction.reply('Stopping POOMMM');
 		}
 		else if (subCommandName === 'resume') {
 			pomodoroManager.resumeState();
+
+			await interaction.reply('Resuming POOMMM');
 		}
 		else if (subCommandName === 'reset') {
 			pomodoroManager.resetState();
+
+			await interaction.reply('Resetting POOMMM');
 		}
 		else if (subCommandName === 'countdownshow') {
 			pomodoroManager.showCountdown();
+
+			await interaction.reply('Showing POOMMM COUNTDOWNN BOOOOOM');
 		}
 		else if (subCommandName === 'countdownclose') {
 			pomodoroManager.closeCountdown();
+
+			await interaction.reply('Closing POOMMM COUNTDOWNN BOOOOOM');
 		}
 	},
 };

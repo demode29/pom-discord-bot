@@ -69,6 +69,10 @@ class UserNotification {
 		message.edit({ embeds: [this.currentCountDownEmbed] });
 	}
 
+	async closeCountdown(message) {
+		message.edit({ embeds: [] });
+	}
+
 	setCurrentChannel(currentChannel) {
 		this.currentChannel = currentChannel;
 	}
