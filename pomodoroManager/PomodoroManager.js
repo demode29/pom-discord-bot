@@ -35,9 +35,12 @@ class PomodoroManager {
 		this.userNotification.showCurrentSettings(this.timerSettings);
 
 		// minutes to seconds conversion and then create timers
+
 		for (const [key, value] of Object.entries(this.timerSettings)) {
 			if (key !== 'iterations') {
 				this.stateMap[key] = new Timer(value);
+
+				this.stateMap[key].on('stateChange', this.changeState.bind(this));
 			}
 		}
 
@@ -46,49 +49,48 @@ class PomodoroManager {
 		this.initStates();
 	}
 
-	async initStates() {
-		// this.userNotification.informChannel('Pomodoro started !!!!');
+	initStates() {
+		this.stateMap[this.currentState.key].start();
+	}
 
-		while (this.currentState.completedPomodoros < 6
-			&& await this.stateMap[this.currentState.key].start()) {
-			this.currentMinutes = this.currentMinutes + (this.stateMap[this.currentState.key].duration);
+	// change state function here, this will be bind on event, timer will create event and then this will be called
+	changeState() {
+		this.currentMinutes = this.currentMinutes + (this.stateMap[this.currentState.key].duration);
 
-			if(this.currentState.key === 'workTime') {
-				this.currentState.completedPomodoros = this.currentState.completedPomodoros + 1;
+		console.log('Changing state');
 
-				if (this.currentState.completedPomodoros % this.timerSettings.iterations === 0) {
-					this.currentState.key = 'longBreakTime';
-				}
-				else {
-					this.currentState.key = 'breakTime';
-				}
+		if(this.currentState.key === 'workTime') {
+			this.currentState.completedPomodoros = this.currentState.completedPomodoros + 1;
+
+			if (this.currentState.completedPomodoros % this.timerSettings.iterations === 0) {
+				this.currentState.key = 'longBreakTime';
 			}
 			else {
-				this.currentState.key = 'workTime';
+				this.currentState.key = 'breakTime';
 			}
 		}
-	}
-
-	async stopState() {
-		// stops the current timer
-	//	this.userNotification.informChannel('Stopping pomodoro');
-
-		(this.stateMap[this.currentState.key]).stop();
-	}
-
-	async resumeState() {
-		// resumes the current timer
-	//	this.userNotification.informChannel('Resuming your pomodoro');
+		else {
+			this.currentState.key = 'workTime';
+		}
 
 		this.initStates();
 	}
 
-	async resetState() {
-		// resets the state timer,
+	stopState() {
+		// stops the current timer
+		(this.stateMap[this.currentState.key]).stop();
+	}
+
+	resumeState() {
+		// resumes the current timer
+		this.initStates();
+	}
+
+	resetState() {
+		// resets the state timer
 		(this.stateMap[this.currentState.key]).reset();
 
 		this.currentState.key = 'workTime';
-		// yine inform user
 	}
 
 	async showCountdown() {
@@ -111,11 +113,12 @@ class PomodoroManager {
 			}
 		}
 		else {
-			this.userNotification.informChannel('There is not any running pomodoro, please start pom. For help use \'/pom help\'');
+			this.userNotification.informChannel('There is not any running pomodoro, ' +
+			'please start pom. For help use \'/pom help\'');
 		}
 	}
 
-	async closeCountdown() {
+	closeCountdown() {
 		this.isCountdownVisible = false;
 	}
 

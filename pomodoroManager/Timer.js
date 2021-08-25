@@ -1,5 +1,9 @@
-class Timer {
+const EventEmitter = require('events');
+
+class Timer extends EventEmitter {
 	constructor(duration) {
+		super();
+
 		this.duration = duration * 60;
 		this.isRunning = false;
 		this.startTime = 0;
@@ -7,7 +11,7 @@ class Timer {
 		this.remainingMinutes = duration;
 	}
 
-	async start() {
+	start() {
 		if (this.isRunning) {
 			return false;
 		}
@@ -16,14 +20,14 @@ class Timer {
 		this.isRunning = true;
 		this.startTime = Date.now();
 
-		return new Promise((resolve) => this.identifier = setInterval(() => {this.timer(resolve);}, 1000));
+		this.identifier = setInterval(() => {this.timer();}, 1000);
 	}
 
-	async reset() {
+	reset() {
 		this.isRunning = false;
 	}
 
-	async stop() {
+	stop() {
 		if(this.isRunning) {
 			this.isRunning = false;
 			this.isStopped = true;
@@ -33,7 +37,7 @@ class Timer {
 		}
 	}
 
-	async timer(resolve) {
+	timer() {
 		let diff = this.duration - (((Date.now() - this.startTime) / 1000) | 0);
 		this.remainingMinutes = Math.round(diff / 60);
 
@@ -43,13 +47,13 @@ class Timer {
 			this.duration = diff;
 			clearInterval(this.identifier);
 
-			return resolve(false);
+			this.emit('stateChange');
 		}
 
 		if(!this.isRunning) {
 			clearInterval(this.identifier);
 
-			return resolve(false);
+			this.emit('stateChange');
 		}
 
 		if(diff < 0) {
@@ -57,7 +61,8 @@ class Timer {
 			diff = 0;
 			this.remainingMinutes = 0;
 			clearInterval(this.identifier);
-			return resolve(true);
+
+			this.emit('stateChange');
 		}
 	}
 

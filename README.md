@@ -8,7 +8,7 @@ Commands:
 /pom resume 
 
 TODO
-There are still lots of things to do. 
+There are still lots of things to do.
 
 ### References
 
