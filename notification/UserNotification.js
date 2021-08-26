@@ -3,7 +3,6 @@ const { MessageEmbed } = require('discord.js');
 class UserNotification {
 	constructor() {
 		this.currentChannel = {};
-		this.currentCountDownEmbed = new MessageEmbed();
 	}
 
 	async showCurrentSettings(currentSettings) {
@@ -48,6 +47,8 @@ class UserNotification {
 	}
 
 	async showPomCountdown(currentState) {
+		this.currentCountDownEmbed = new MessageEmbed();
+
 		const parsedState = this.parseState(currentState.key);
 
 		this.currentCountDownEmbed.setTitle(parsedState.stateTitle).setColor(parsedState.stateColor)
@@ -73,8 +74,6 @@ class UserNotification {
 
 	async closeCountdown(message) {
 		message.delete();
-
-		this.currentCountDownEmbed = new MessageEmbed();
 	}
 
 	setCurrentChannel(currentChannel) {
