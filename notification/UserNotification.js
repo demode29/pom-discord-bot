@@ -55,6 +55,8 @@ class UserNotification {
 				{ name: 'Remaining Time', value: `${currentState.remainingMinutes} min left` },
 			);
 
+		console.log(this.currentCountDownEmbed);
+
 		return await this.currentChannel.send({ embeds: [this.currentCountDownEmbed] });
 	}
 
@@ -70,7 +72,9 @@ class UserNotification {
 	}
 
 	async closeCountdown(message) {
-		message.edit({ embeds: [] });
+		message.delete();
+
+		this.currentCountDownEmbed = new MessageEmbed();
 	}
 
 	setCurrentChannel(currentChannel) {

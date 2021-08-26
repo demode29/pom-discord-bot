@@ -111,6 +111,8 @@ class PomodoroManager {
 
 				prevState = this.currentState.remainingMinutes;
 			}
+
+			this.userNotification.closeCountdown(message);
 		}
 		else {
 			this.userNotification.informChannel('There is not any running pomodoro, ' +
